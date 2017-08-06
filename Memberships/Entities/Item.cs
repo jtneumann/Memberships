@@ -24,6 +24,7 @@ namespace Memberships.Entities
         public string Url { get; set; }
 
         [MaxLength(1024)]
+        [Display(Name = "Image Url")]
         public string ImageUrl { get; set; }
 
         [AllowHtml]
