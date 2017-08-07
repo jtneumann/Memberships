@@ -43,8 +43,8 @@ namespace Memberships.Areas.Admin.Models
         public string ProductLinkText
         {
             get {
-                return ProductLinkTexts == null || ProductLinkTexts.Count(0) ?
-                    string.Empty : ProductLinkTexts.First(plt => plt.Id.Equals(ProductLinkTexts)).Title;
+                return ProductLinkTexts == null || ProductLinkTexts.Count.Equals(0) ?
+                    string.Empty : ProductLinkTexts.First(plt => plt.Id.Equals(ProductLinkTextId)).Title;
             }
         }
     }

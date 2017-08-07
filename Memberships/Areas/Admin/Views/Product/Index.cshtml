@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Memberships.Entities.Product>
-@using Memberships.Areas.Admin.Models
+﻿@model IEnumerable<Memberships.Areas.Admin.Models.ProductModel>
+@using Memberships.Areas.Admin.Models;
 
 @{
     ViewBag.Title = "Index";
@@ -19,14 +19,12 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.WaitDays)
+            @Html.DisplayNameFor(model => model.ProductLinkTexts)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsFree)
+            @Html.DisplayNameFor(model => model.ProductTypes)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.HTML)
-        </th>
+
         <th></th>
     </tr>
 
@@ -40,14 +38,15 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WaitDays)
+                @* Note second line is to display the id in paratheses; also "s" removed from first line to deliver a string result from the collection which is denoted with the "S" in the names above.*@
+                @Html.DisplayFor(modelItem => item.ProductLinkText)
+                (@{@Html.DisplayFor(modelItem => item.ProductLinkTextId)})
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsFree)
+                @Html.DisplayFor(modelItem => item.ProductType)
+                (@{@Html.DisplayFor(modelItem => item.ProductTypeId)})
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HTML)
-            </td>
+
             <td>
                 @Html.Partial("_TableButtonsPartial", new SmallButtonModel { Id = item.Id })
             </td>
