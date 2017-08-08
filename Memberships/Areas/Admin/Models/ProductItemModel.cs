@@ -11,10 +11,13 @@ namespace Memberships.Areas.Admin.Models
     {
         [Display(Name = "Product Id")]
         public int ProductId { get; set; }
+
         [Display(Name = "Item Id")]
         public int ItemId { get; set; }
+
         [Display(Name = "Product")]
         public string ProductTitle { get; set; }
+
         [Display(Name = "Item")]
         public string ItemTitle { get; set; }
 

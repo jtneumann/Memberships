@@ -124,6 +124,23 @@ namespace Memberships.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        private async Task<ProductItem> GetProductItem(int? itemId, int? productId)
+        {
+            try
+            {
+                int itmId = 0, prdId = 0;
+                int.TryParse(itemId.ToString(), out itmId);
+                int.TryParse(productId.ToString(), out prdId);
+
+                // Holds the result from the LINQ query matching the parameter values.
+                var productItem = await db.ProductItems.FirstOrDefaultAsync(
+                    pi => pi.ProductId.Equals(prdId) && pi.ItemId.Equals(itmId));
+
+                return productItem;
+            }
+            catch { return null; }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -133,20 +150,6 @@ namespace Memberships.Areas.Admin.Controllers
             base.Dispose(disposing);
         }
 
-        private async Task<ProductItem> GetProductItem(int? itemId, int? productId)
-        {
-            try
-            {
-                int itmId = 0, prdId = 0;
-                int.TryParse(itemId.ToString(), out itmId);
-                int.TryParse(productId.ToString(), out prdId);
-
-                var productItem = await db.ProductItems.FirstOrDefaultAsync(
-                    pi => pi.ProductId.Equals(prdId) && pi.ItemId.Equals(itmId));
-
-                return productItem;
-            }
-            catch { return null; }
-        }
+        
     }
 }

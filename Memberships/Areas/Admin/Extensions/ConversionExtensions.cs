@@ -63,7 +63,7 @@ namespace Memberships.Areas.Admin.Extensions
             return model;
         }
 
-        public static async Task<List<ProductItemModel>> Convert(this IQueryable<ProductItem> productItems,
+        public static async Task<IEnumerable<ProductItemModel>> Convert(this IQueryable<ProductItem> productItems,
             ApplicationDbContext db)
         {
             if (productItems.Count().Equals(0))
@@ -77,6 +77,18 @@ namespace Memberships.Areas.Admin.Extensions
                                    ItemTitle = db.Items.FirstOrDefault(i => i.Id.Equals(pi.ItemId)).Title,
                                    ProductTitle = db.Products.FirstOrDefault(p => p.Id.Equals(pi.ProductId)).Title
                                }).ToListAsync();
+            return model;
+        }
+
+        public static async Task<ProductItemModel> Convert(this ProductItem productItem, ApplicationDbContext db)
+        {
+            var model = new ProductItemModel
+            {
+                ItemId = productItem.ItemId,
+                ProductId = productItem.ProductId,
+                Items = await db.Items.ToListAsync(),
+                Products = await db.Products.ToListAsync()
+        };
             return model;
         }
     }
