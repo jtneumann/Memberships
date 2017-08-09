@@ -8,6 +8,7 @@ using System.Collections;
 using Memberships.Areas.Admin.Models;
 using Memberships.Models;
 using Memberships.Entities;
+using System.Transactions;
 
 namespace Memberships.Areas.Admin.Extensions
 {
@@ -103,6 +104,50 @@ namespace Memberships.Areas.Admin.Extensions
                 pi.ItemId.Equals(productItem.ItemId));
             // means original exists but a new doesn't
             return oldPI.Equals(1) && newPI.Equals(0);
+        }
+
+        public static async Task Change(this ProductItem productItem, ApplicationDbContext db)
+        {
+            var oldProductItem = await db.ProductItems.FirstOrDefaultAsync(
+                pi => pi.ProductId.Equals(productItem.OldProductId) &&
+                pi.ItemId.Equals(productItem.OldItemId));
+
+            var newProductItem = await db.ProductItems.FirstOrDefaultAsync(
+                pi => pi.ProductId.Equals(productItem.ProductId) &&
+                pi.ItemId.Equals(productItem.ItemId));
+
+            if(oldProductItem != null && newProductItem == null)
+            {
+                newProductItem = new ProductItem
+                {
+                    ItemId = productItem.ItemId,
+                    ProductId = productItem.ProductId
+                };
+
+                //TransactionScope requires a ref to System.Transactions
+                using (var transaction = new TransactionScope(
+                    TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    try
+                    {
+                        // Remove the existing ProductItem
+                        db.ProductItems.Remove(oldProductItem);
+
+                        // Add the new (changed) ProductItemd
+                        db.ProductItems.Add(newProductItem);
+
+                        await db.SaveChangesAsync();
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                    }
+                }
+
+            }
+
         }
     }
 }
