@@ -166,5 +166,93 @@ namespace Memberships.Areas.Admin.Extensions
             return model;
         }
 
+        public static async Task<IEnumerable<SubscriptionProductModel>> Convert(this IQueryable<SubscriptionProduct> subscriptionProduct, ApplicationDbContext db)
+        {
+            if (subscriptionProduct.Count().Equals(0))
+                return new List<SubscriptionProductModel>();
+
+            var model = await (from sp in subscriptionProduct
+                               select new SubscriptionProductModel
+                               {
+                                   SubscriptionId = sp.SubscriptionId,
+                                   ProductId = sp.ProductId,
+                                   SubscriptionTitle = db.Subscriptions.FirstOrDefault(i => i.Id.Equals(sp.SubscriptionId)).Title,
+                                   ProductTitle = db.Products.FirstOrDefault(p => p.Id.Equals(sp.ProductId)).Title
+                               }).ToListAsync();
+            return model;
+        }
+
+        public static async Task<SubscriptionProductModel> Convert(this SubscriptionProduct subscriptionProduct, ApplicationDbContext db, bool addListData = true)
+        {
+            var model = new SubscriptionProductModel
+            {
+                SubscriptionId = subscriptionProduct.SubscriptionId,
+                ProductId = subscriptionProduct.ProductId,
+                Subscriptions = addListData? await db.Subscriptions.ToListAsync(): null,
+                Products = addListData? await db.Products.ToListAsync() : null,
+                SubscriptionTitle = (await db.Subscriptions.FirstOrDefaultAsync(
+                    st => st.Id.Equals(subscriptionProduct.SubscriptionId))).Title,
+                ProductTitle = (await db.Products.FirstOrDefaultAsync(
+                    p => p.Id.Equals(subscriptionProduct.ProductId))).Title
+            };
+            return model;
+        }
+        public static async Task<bool> CanChange(this SubscriptionProduct subscriptionProduct, ApplicationDbContext db)
+        {
+            var oldSP = await db.SubscriptionProducts.CountAsync(
+                sp => sp.ProductId.Equals(subscriptionProduct.OldProductId) &&
+                sp.SubscriptionId.Equals(subscriptionProduct.OldSubscriptionId));
+
+            var newSP = await db.SubscriptionProducts.CountAsync(
+                sp => sp.ProductId.Equals(subscriptionProduct.ProductId) && 
+                sp.SubscriptionId.Equals(subscriptionProduct.SubscriptionId));
+
+            // means original exists but a new doesn't
+            return oldSP.Equals(1) && newSP.Equals(0);
+        }
+        public static async Task Change(this SubscriptionProduct subscriptionProduct, ApplicationDbContext db)
+        {
+            var oldSubscriptionProduct = await db.SubscriptionProducts.FirstOrDefaultAsync(
+                pi => pi.ProductId.Equals(subscriptionProduct.OldProductId) &&
+                pi.SubscriptionId.Equals(subscriptionProduct.OldSubscriptionId));
+
+            var newSubscriptionProduct = await db.SubscriptionProducts.FirstOrDefaultAsync(
+                pi => pi.ProductId.Equals(subscriptionProduct.ProductId) &&
+                pi.SubscriptionId.Equals(subscriptionProduct.SubscriptionId));
+
+            if (oldSubscriptionProduct != null && newSubscriptionProduct == null)
+            {
+                newSubscriptionProduct = new SubscriptionProduct
+                {
+                    SubscriptionId = subscriptionProduct.SubscriptionId,
+                    ProductId = subscriptionProduct.ProductId
+                };
+
+                //TransactionScope requires a ref to System.Transactions
+                using (var transaction = new TransactionScope(
+                    TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    try
+                    {
+                        // Remove the existing ProductItem
+                        db.SubscriptionProducts.Remove(oldSubscriptionProduct);
+
+                        // Add the new (changed) ProductItemd
+                        db.SubscriptionProducts.Add(newSubscriptionProduct);
+
+                        await db.SaveChangesAsync();
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                    }
+                }
+
+            }
+
+        }
+
     }
 }
