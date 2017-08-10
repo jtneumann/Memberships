@@ -1,4 +1,4 @@
-﻿@model Memberships.Areas.Admin.Models.ProductItemModel
+﻿@model Memberships.Areas.Admin.Models.SubscriptionProductModel
 @using Memberships.Extensions
 
 @{
@@ -26,13 +26,13 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-group">  
+            @Html.LabelFor(model => model.Subscriptions, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ItemId,
-               Model.Items.ToSelectListItem(Model.ItemId),
+                @Html.DropDownListFor(model => model.SubscriptionId,
+               Model.Subscriptions.ToSelectListItem(Model.SubscriptionId),
                 new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.SubscriptionId, "", new { @class = "text-danger" })
             </div>
         </div>
 
