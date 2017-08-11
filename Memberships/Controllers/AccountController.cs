@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Memberships.Models;
+using Memberships.Extensions;
+using System.Collections.Generic;
 
 namespace Memberships.Controllers
 {
@@ -51,6 +53,16 @@ namespace Memberships.Controllers
                 _userManager = value;
             }
         }
+        // Index method to list users
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Index()
+        {
+            var users = new List<UserViewModel>();
+            await users.GetUsers();
+
+            return View(users);
+        }
+
 
         //
         // GET: /Account/Login
