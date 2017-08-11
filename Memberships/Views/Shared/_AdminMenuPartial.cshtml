@@ -1,4 +1,7 @@
 ﻿
+
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
+{
 <li class="dropdown" data-admin-menu>
     <a href="#">
         Admin
@@ -33,3 +36,4 @@
 
     </ul>
 </li>
+}

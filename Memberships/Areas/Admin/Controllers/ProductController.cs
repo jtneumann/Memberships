@@ -16,6 +16,7 @@ using System.Transactions;
 
 namespace Memberships.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
