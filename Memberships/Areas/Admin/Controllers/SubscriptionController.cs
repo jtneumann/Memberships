@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Memberships.Entities;
 using Memberships.Models;
+using System.Transactions;
 
 namespace Memberships.Areas.Admin.Controllers
 {
@@ -112,8 +113,25 @@ namespace Memberships.Areas.Admin.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Subscription subscription = await db.Subscriptions.FindAsync(id);
-            db.Subscriptions.Remove(subscription);
-            await db.SaveChangesAsync();
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    var prodSubscr = db.SubscriptionProducts.Where(
+                        sp => sp.SubscriptionId.Equals(id));
+                    db.SubscriptionProducts.RemoveRange(prodSubscr);
+                    db.Subscriptions.Remove(subscription);
+
+                    await db.SaveChangesAsync();
+                    transaction.Complete();
+                }
+                catch 
+                {
+                    transaction.Dispose();
+
+                }
+          
+            }          
             return RedirectToAction("Index");
         }
 

@@ -112,8 +112,13 @@ namespace Memberships.Areas.Admin.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             ProductLinkText productLinkText = await db.ProductLinkTexts.FindAsync(id);
-            db.ProductLinkTexts.Remove(productLinkText);
-            await db.SaveChangesAsync();
+            var isUnused = await db.Products.CountAsync(i => i.ProductLinkTextId(id)) == 0;
+
+            if (isUnused)
+            {
+                db.ProductLinkTexts.Remove(productLinkText);
+                await db.SaveChangesAsync();
+            }  
             return RedirectToAction("Index");
         }
 

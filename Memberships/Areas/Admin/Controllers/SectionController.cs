@@ -112,8 +112,13 @@ namespace Memberships.Areas.Admin.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Section section = await db.Sections.FindAsync(id);
-            db.Sections.Remove(section);
-            await db.SaveChangesAsync();
+            var isUnused = await db.Items.CountAsync(i => i.SectionId.Equals(id)) == 0;
+
+            if (isUnused)
+            {
+                db.Sections.Remove(section);
+                await db.SaveChangesAsync();
+            }
             return RedirectToAction("Index");
         }
 
