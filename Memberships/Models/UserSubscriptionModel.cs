@@ -8,6 +8,8 @@ namespace Memberships.Models
 {
     public class UserSubscriptionModel
     {
+        public int Id { get; set; }
+
         [MaxLength(255)]
         [Required]
         public string Title { get; set; }
