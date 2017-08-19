@@ -94,12 +94,12 @@ namespace Memberships.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check if the ProductItem can be changed
+                // Check if the SubscriptionProduct can be changed
                 var canChange = await subscriptionProduct.CanChange(db);
 
                 if (canChange)
                 {
-                    // Change the ProductItem
+                    // Change the SubscriptionProduct
                     await subscriptionProduct.Change(db);
                 }
                 return RedirectToAction("Index");
@@ -145,7 +145,7 @@ namespace Memberships.Areas.Admin.Controllers
 
                 // Holds the result from the LINQ query matching the parameter values.
                 var subscriptionProduct = await db.SubscriptionProducts.FirstOrDefaultAsync(
-                    pi => pi.ProductId.Equals(prdId) && pi.SubscriptionId.Equals(subscrId));
+                    sp => sp.ProductId.Equals(prdId) && sp.SubscriptionId.Equals(subscrId));
 
                 return subscriptionProduct;
             }

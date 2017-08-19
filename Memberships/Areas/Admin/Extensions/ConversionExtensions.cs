@@ -14,6 +14,7 @@ namespace Memberships.Areas.Admin.Extensions
 {
     public static class ConversionExtensions
     {
+        #region Product
         public static async Task<IEnumerable<ProductModel>> Convert(this IEnumerable<Product> products, ApplicationDbContext db)
         {
             if (products.Count().Equals(0))
@@ -63,7 +64,9 @@ namespace Memberships.Areas.Admin.Extensions
 
             return model;
         }
+        #endregion
 
+        #region ProductItem
         public static async Task<IEnumerable<ProductItemModel>> Convert(this IQueryable<ProductItem> productItems,
             ApplicationDbContext db)
         {
@@ -165,7 +168,9 @@ namespace Memberships.Areas.Admin.Extensions
             };
             return model;
         }
+        #endregion
 
+        #region Subscription Product
         public static async Task<IEnumerable<SubscriptionProductModel>> Convert(this IQueryable<SubscriptionProduct> subscriptionProduct, ApplicationDbContext db)
         {
             if (subscriptionProduct.Count().Equals(0))
@@ -213,12 +218,12 @@ namespace Memberships.Areas.Admin.Extensions
         public static async Task Change(this SubscriptionProduct subscriptionProduct, ApplicationDbContext db)
         {
             var oldSubscriptionProduct = await db.SubscriptionProducts.FirstOrDefaultAsync(
-                pi => pi.ProductId.Equals(subscriptionProduct.OldProductId) &&
-                pi.SubscriptionId.Equals(subscriptionProduct.OldSubscriptionId));
+                sp => sp.ProductId.Equals(subscriptionProduct.OldProductId) &&
+                sp.SubscriptionId.Equals(subscriptionProduct.OldSubscriptionId));
 
             var newSubscriptionProduct = await db.SubscriptionProducts.FirstOrDefaultAsync(
-                pi => pi.ProductId.Equals(subscriptionProduct.ProductId) &&
-                pi.SubscriptionId.Equals(subscriptionProduct.SubscriptionId));
+                sp => sp.ProductId.Equals(subscriptionProduct.ProductId) &&
+                sp.SubscriptionId.Equals(subscriptionProduct.SubscriptionId));
 
             if (oldSubscriptionProduct != null && newSubscriptionProduct == null)
             {
@@ -253,6 +258,6 @@ namespace Memberships.Areas.Admin.Extensions
             }
 
         }
-
+        #endregion
     }
 }
