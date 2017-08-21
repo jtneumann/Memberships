@@ -20,7 +20,7 @@ namespace Memberships.Extensions
                 var claims = ctx.GetOwinContext()
                     .Get<ApplicationSignInManager>()
                     .AuthenticationManager.User.Claims
-                    .FirstOrDefault(claim => claim.Type.Equals(nameidentifier)):
+                    .FirstOrDefault(claim => claim.Type.Equals(nameidentifier));
 
                 // check if the user is logged in and a claim exists
                 if (claims != default(Claim)) uid = claims.Value;
