@@ -234,6 +234,7 @@
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Extensions\SectionExtensions.cs" />
     <Compile Include="Extensions\ThumbnailExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -244,6 +245,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ProductItemRow.cs" />
     <Compile Include="Models\ProductSection.cs" />
+    <Compile Include="Models\ProductSectionModel.cs" />
     <Compile Include="Models\ThumbnailAreaModel.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\UserSubscriptionModel.cs" />
@@ -385,10 +387,10 @@
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Account\Subscriptions.cshtml" />
     <Content Include="Views\Shared\_ThumbnailAreaPartial.cshtml" />
+    <Content Include="Views\ProductContent\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ProductContent\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
