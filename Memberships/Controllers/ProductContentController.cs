@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Threading.Tasks;
+using Memberships.Extensions;
 
 namespace Memberships.Controllers
 {
@@ -13,7 +14,10 @@ namespace Memberships.Controllers
         // GET: ProductContent
         public async Task<ActionResult> Index(int id)
         {
-            return View();
+            var userId = Request.IsAuthenticated ?
+                HttpContext.GetUserId() : null;
+            var sections = await SectionExtensions.GetProductSectionsAsync(id, userId);
+            return View(sections);
         }
     }
 }
