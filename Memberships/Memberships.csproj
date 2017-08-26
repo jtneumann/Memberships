@@ -392,6 +392,7 @@
     <Content Include="Views\Shared\_ThumbnailAreaPartial.cshtml" />
     <Content Include="Views\ProductContent\Index.cshtml" />
     <Content Include="Views\Shared\_ProductSectionPartial.cshtml" />
+    <Content Include="Views\Shared\_ProductItemRowPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
