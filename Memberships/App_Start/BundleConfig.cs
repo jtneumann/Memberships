@@ -35,7 +35,9 @@ namespace Memberships
                        "~/Content/thumbnails.css", 
                        "~/Content/ProductContent.css",
                        "~/Content/carret.css",
-                       "~/Content/carret.js"));
+                       "~/Content/html.css",
+                       "~/Content/carret.js",
+                       "~/Scripts/JWPlayer.js"));
 
         }
     }
