@@ -706,6 +706,9 @@ namespace Memberships.Controllers
             return RedirectToAction("Subscriptions", "Account", new { userId = userId });
         }
 
+        #region Register User
+
+
         //
         // POST: /Account/RegisterUser
         [HttpPost]
@@ -713,6 +716,8 @@ namespace Memberships.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterUserAsync(RegisterUserModel model)
         {
+            model.AcceptUserAgreement = true;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -725,24 +730,36 @@ namespace Memberships.Controllers
                     EmailConfirmed = true
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // Add a default subscription called "Free" to all users. [OPTIONAL-uncomment next line if so.
+                    //await SubscriptionExtensions.RegisterUserSubscriptionCode("Free", user.Id);
 
                     return PartialView("_RegisterUserPartial", model);
                 }
-                AddErrors(result);
+                AddUserErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
             return PartialView("_RegisterUserPartial", model);
         }
+
+        private void AddUserErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                if (error.StartsWith("Name") && error.EndsWith("is already taken"))
+                {
+                    continue;
+                }
+
+                ModelState.AddModelError("", error);
+            }
+        }
+        #endregion
 
         protected override void Dispose(bool disposing)
         {
@@ -783,6 +800,8 @@ namespace Memberships.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
+
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
