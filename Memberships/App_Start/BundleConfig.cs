@@ -40,6 +40,7 @@ namespace Memberships
                        "~/Content/RegisterUser.css",
                        "~/Content/carret.js",
                        "~/Scripts/RegisterCode.js",
+                       "~/Scripts/RegisterUser.js",
                        "~/Scripts/JWPlayer.js"));
 
         }
