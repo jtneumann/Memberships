@@ -33,6 +33,11 @@ else
            })
             </div>
         </li>
+        @* parameter is listed as "Pwd" in github source code *@
+        <li>
+            @Html.GlyphLink("", "", "Pwd", "lock", "", "pwdLink", new Dictionary<string, string>
+            { {"data-toggle", "modal" }, { "data-target", "#pwdModal" } })
+        </li>
 
     </ul>
 

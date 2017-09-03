@@ -47,7 +47,8 @@ namespace Memberships
                        "~/Content/html.css",
                        "~/Content/RegisterCode.css",
                        "~/Content/RegisterUser.css",
-                       "~/Content/login.css"));
+                       "~/Content/login.css",
+                       "~/Content/forgot-password.css"));
 
         }
     }
