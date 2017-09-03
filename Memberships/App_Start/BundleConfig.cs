@@ -30,6 +30,15 @@ namespace Memberships
             bundles.Add(new ScriptBundle("~/bundles/admin").Include(
                         "~/Scripts/AdminMenu.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/ui").Include(
+                      "~/Scripts/carret.js",
+                      "~/Scripts/JWPlayer.js",
+                      "~/Scripts/code.js",
+                      "~/Scripts/RegisterUser.js",
+                      "~/Scripts/login.js",
+                      "~/Scripts/forgot-password.js"
+                      ));
+
             bundles.Add(new ScriptBundle("~/Content/membership").Include(
                        "~/Content/navbar.css",
                        "~/Content/thumbnails.css", 
@@ -38,10 +47,7 @@ namespace Memberships
                        "~/Content/html.css",
                        "~/Content/RegisterCode.css",
                        "~/Content/RegisterUser.css",
-                       "~/Content/carret.js",
-                       "~/Scripts/RegisterCode.js",
-                       "~/Scripts/RegisterUser.js",
-                       "~/Scripts/JWPlayer.js"));
+                       "~/Content/login.css"));
 
         }
     }
